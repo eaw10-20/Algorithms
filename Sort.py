@@ -1,3 +1,5 @@
+import math
+
 class Sort:
 	"""
 	Heap Sort (from list)
@@ -46,8 +48,11 @@ class Sort:
 
 
 	def bubbleSort(self, ary):
+		# set is length of the portion of the array that is still unsorted
+		# not including value being moved
 		set = len(ary)-1
 		while set > 0:
+			# i is the index of the value being moved
 			i = 0
 			while i < set:
 				if ary[i] > ary[i+1]:
@@ -56,10 +61,31 @@ class Sort:
 			set -= 1
 
 
-
-
-
-ary = [32, 81, 45, 62, 90, 14, 17, 65, 39, 44, 8]
-sorter = Sort()
-sorter.heapSort_array(ary)
-print(ary)
+	def mergeSort(self, ary):
+		a = len(ary)
+		# if array length is 1 return input
+		if a <= 1:
+			return ary
+		# find location in array to split
+		half = math.ceil(len(ary)/2)
+		# get right and left sorted lists
+		l = ary[:half]
+		r = ary[half:]
+		l = self.mergeSort(l)
+		r = self.mergeSort(r)
+		# fuse 2 lists together until one is empty
+		il, ir = 0, 0
+		ret = []
+		while il < len(l) and ir < len(r):
+			if r[ir] < l[il]:
+				ret.append(r[ir])
+				ir += 1
+			else:
+				ret.append(l[il])
+				il += 1
+		# add non empty array to end of list
+		if il == len(l):
+			ret = ret + r[ir:]
+		else:
+			ret = ret + l[il:]
+		return ret
